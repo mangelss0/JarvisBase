@@ -21,12 +21,14 @@ AUDIO_FORMAT = "audio/wav"
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 eleven_api_key = os.environ.get('ELEVEN_API_KEY')
 active_loop_data_set_path = os.environ.get('DEEPLAKE_DATASET_PATH')
+active_loop_token = os.getenv('ACTIVELOOP_TOKEN')
 
 # Load embeddings and DeepLake database
-def load_embeddings_and_database(active_loop_data_set_path):
+def load_embeddings_and_database(active_loop_data_set_path, active_loop_token):
     embeddings = OpenAIEmbeddings()
     db = DeepLake(
         dataset_path=active_loop_data_set_path,
+        token=active_loop_token,
         read_only=True,
         embedding_function=embeddings
     )
@@ -102,7 +104,7 @@ def main():
     st.write("# JarvisBase 🧙")
    
     # Load embeddings and the DeepLake database
-    db = load_embeddings_and_database(active_loop_data_set_path)
+    db = load_embeddings_and_database(active_loop_data_set_path, active_loop_token)
 
     # Record and transcribe audio
     transcription = record_and_transcribe_audio()
